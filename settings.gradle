@@ -1,1 +1,4 @@
-include ':app', ':Test', ':ScriptParser', ':fake-script'
+rootProject.name = "ReflectMaster"
+
+include ':app'
+include ':fake-script'

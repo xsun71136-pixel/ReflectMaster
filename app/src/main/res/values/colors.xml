@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!-- Brand: indigo "mirror" palette, shared by the launcher icon and the UI. -->
+    <color name="rm_primary">#4F5BD5</color>
+    <color name="rm_secondary">#7C4DFF</color>
+    <color name="rm_tertiary">#00BFA5</color>
+
+    <color name="ic_launcher_background">#3949AB</color>
+
+    <color name="rm_surface_dark">#1B1D2A</color>
+    <color name="rm_on_surface_dark">#E6E8F2</color>
+    <color name="rm_accent_dark">#8C9EFF</color>
+
+    <color name="rm_ok">#2E7D32</color>
+    <color name="rm_warn">#EF6C00</color>
+    <color name="rm_err">#C62828</color>
+    <color name="rm_muted">#7A7F92</color>
+    <color name="rm_text_primary">#1B1D2A</color>
 </resources>

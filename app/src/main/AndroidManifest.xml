@@ -1,37 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="formatfa.reflectmaster">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--
+      Android 11 (API 30) introduced package visibility filtering: without this
+      permission getInstalledPackages() only returns a handful of apps, which
+      silently broke the target picker. The old build also asked for
+      READ_PHONE_STATE purely to build a licensing device id - that is gone.
+    -->
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- Only needed for the optional "system overlay" console mode. The default
+         mode injects the console into the target Activity's own decorView and
+         therefore needs no permission at all. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Scoped storage: scripts/hooks live in the module's own storage or are
+         exchanged through SAF. WRITE_EXTERNAL_STORAGE is a no-op on API 30+ so
+         it is only requested up to API 28. -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- Let the module see / launch the LSPosed manager on Android 11+. -->
+    <queries>
+        <package android:name="org.lsposed.manager" />
+        <package android:name="de.robv.android.xposed.installer" />
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+    </queries>
 
     <application
+        android:name=".RmApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        android:theme="@style/Theme.ReflectMaster"
+        tools:targetApi="34">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
+        <!-- ===================== LSPosed / Xposed metadata ===================== -->
         <meta-data
             android:name="xposedmodule"
             android:value="true" />
         <meta-data
             android:name="xposeddescription"
-            android:value="反射大师模块" />
+            android:value="@string/xposed_description" />
+        <!-- 82 == the XposedBridge API level shipped in libs/api-82.jar and the
+             minimum version LSPosed accepts. -->
         <meta-data
             android:name="xposedminversion"
-            android:value="54" />
+            android:value="82" />
+        <!-- LSPosed reads this to offer a one-tap "add framework" scope entry. -->
+        <meta-data
+            android:name="xposedsharedprefs"
+            android:value="true" />
 
-        <activity android:name=".ScriptManager" />
-        <activity android:name=".Register" />
-        <activity android:name=".ScriptEditActivity"></activity>
+        <!-- ============================== UI ============================== -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.TargetsActivity"
+            android:exported="false"
+            android:label="@string/title_targets"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.ScriptsActivity"
+            android:exported="false"
+            android:label="@string/title_scripts"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.ScriptEditActivity"
+            android:exported="false"
+            android:label="@string/title_script_edit"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".ui.ScriptsActivity" />
+
+        <activity
+            android:name=".ui.HooksActivity"
+            android:exported="false"
+            android:label="@string/title_hooks"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.HookEditActivity"
+            android:exported="false"
+            android:label="@string/title_hook_edit"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".ui.HooksActivity" />
+
+        <activity
+            android:name=".ui.LogActivity"
+            android:exported="false"
+            android:label="@string/title_log"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <!--
+          Fallback config channel for the hook side.
+          On Android 11 the module's shared_prefs file is not readable from
+          another process (SELinux), and MODE_WORLD_READABLE throws since API 24.
+          LSPosed normally makes XSharedPreferences work again; when it does
+          not, the hooked process queries this provider instead. It only answers
+          callers whose package is on the enabled target list.
+        -->
+        <provider
+            android:name=".provider.ConfigProvider"
+            android:authorities="formatfa.reflectmaster.config"
+            android:exported="true"
+            android:grantUriPermissions="false" />
+
     </application>
 
 </manifest>

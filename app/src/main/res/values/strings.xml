@@ -1,8 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">反射大师</string>
+    <string name="app_subtitle">运行时反射控制台 · LSPosed 模块</string>
+    <string name="xposed_description">运行时反射检查器：在目标应用内呼出悬浮控制台，浏览与修改字段、调用方法、执行 FakeScript 脚本与自定义 Hook。</string>
 
+    <!-- ============================== titles ============================== -->
+    <string name="title_targets">目标应用</string>
+    <string name="title_scripts">脚本</string>
+    <string name="title_script_edit">编辑脚本</string>
+    <string name="title_hooks">自定义 Hook</string>
+    <string name="title_hook_edit">编辑 Hook</string>
+    <string name="title_log">运行日志</string>
 
-    <string name="about">当前版本:1.9 \n 1.9_2019-1-27\n1.更换格格脚本为FakeScript\n2.替换五角星为六芒星\n3.显示系统应用\n4.新增若干未知bug\n反射大师是一款软件，本软件造成的问题由使用者负责，如果你同意以上要求，请点击同意，否则请点击不同意退出软件</string>
+    <!-- ============================ dashboard ============================ -->
+    <string name="card_module">模块状态</string>
+    <string name="card_target">目标应用</string>
+    <string name="card_console">悬浮控制台</string>
+    <string name="card_script">脚本</string>
+    <string name="card_hook">自定义 Hook</string>
+    <string name="card_log">日志与收件箱</string>
+    <string name="card_about">关于</string>
+    <string name="card_danger">重置</string>
 
+    <string name="module_active">已激活</string>
+    <string name="module_inactive">未激活</string>
+    <string name="module_active_hint">框架已把模块加载进本进程。若目标应用里呼不出控制台，请确认目标应用已加入作用域并被强制停止后重新打开。</string>
+    <string name="module_inactive_hint">请在 LSPosed 管理器中启用本模块，勾选目标应用；如需在此显示「已激活」，请把「反射大师」自身也加入作用域。设置完成后强制停止目标应用再打开。</string>
+    <string name="open_manager">打开管理器</string>
+    <string name="manager_not_found">没有找到 LSPosed / Xposed 管理器（可能被隐藏）。请在管理器中手动启用本模块并勾选作用域。</string>
+    <string name="module_detail">框架 %1$s · XposedBridge API %2$d · 已装 Hook %3$d · 配置版本 %4$d</string>
 
+    <string name="target_summary_none">尚未选择目标应用</string>
+    <string name="target_summary">已选 %1$d 个应用</string>
+    <string name="target_hint">这里选择的目标，必须同时出现在 LSPosed 管理器的「作用域」中，模块才会被注入。</string>
+    <string name="manage_targets">管理目标</string>
+
+    <string name="console_enable">启用悬浮控制台</string>
+    <string name="console_trigger">呼出方式</string>
+    <string name="console_size">面板尺寸</string>
+    <string name="console_alpha">不透明度</string>
+    <string name="console_dark">深色面板</string>
+    <string name="console_remember_pos">记忆悬浮球位置</string>
+    <string name="console_preview">预览悬浮球</string>
+    <string name="console_overlay_mode">改用系统悬浮窗（需宿主应用有悬浮窗权限）</string>
+    <string name="console_hint">默认注入到目标 Activity 自身窗口，不需要任何权限，也不会出现 BadTokenException。</string>
+
+    <string name="trigger_none">关闭（仅自定义 Hook 生效）</string>
+    <string name="trigger_volume_long">长按音量下 0.6 秒（短按仍正常调节音量）</string>
+    <string name="trigger_bubble">常驻悬浮球</string>
+
+    <string name="script_summary">%1$d 个脚本</string>
+    <string name="hook_summary">%1$d 条规则 · %2$d 条启用</string>
+    <string name="manage">管理</string>
+
+    <string name="log_view">查看日志</string>
+    <string name="log_clear">清空</string>
+    <string name="log_export">导出</string>
+    <string name="log_empty">暂无日志</string>
+    <string name="log_cleared">日志已清空</string>
+    <string name="confirm_clear_log">确定清空模块日志？收件箱文件不受影响。</string>
+    <string name="log_hint">这里是模块进程收到的日志（由目标进程通过 ContentProvider 回传）。LSPosed 框架侧日志请在管理器中查看。</string>
+    <string name="inbox">收件箱</string>
+    <string name="inbox_empty">收件箱为空。脚本里用 io.saveInbox() 或字段操作「保存到收件箱」写入。</string>
+
+    <string name="about_version">版本 %1$s (%2$d)</string>
+    <string name="about_usage">使用说明</string>
+    <string name="about_usage_text">1. 在 LSPosed 管理器中启用「反射大师」，勾选目标应用，强制停止后重新打开目标应用。\n2. 在目标应用内长按音量下键呼出悬浮控制台；也可改为常驻悬浮球。\n3. 控制台分页：对象 / 字段 / 方法 / 构造 / 脚本 / 日志。\n4. 字段：点击下钻或编辑；长按可编辑值、存入变量槽、复制签名、查看类型专属操作。\n5. 方法：点击弹出参数框调用；长按可复制 Hook 用的「类名 方法名 参数类型」。\n6. 变量槽引用写法 $v0、$v1……；空值写 $null；十六进制写 0x1F；数组写 [1,2,3]。\n7. 脚本用 FakeScript 语法，入口 func main()，内置能力为 rf.* 与 io.*。\n8. 自定义 Hook 入口为 func hook(param)，用 rf.setResult / rf.setArg / rf.getArg 改写调用。\n9. 目标进程产出的文件（截图、byte[]）通过 io.saveInbox 回传到本模块的收件箱，可在此导出。</string>
+    <string name="about_script_api">脚本 API 速查</string>
+    <string name="about_script_api_text">rf.print/log/toast/copy/summon\nrf.thiz/ctx/activity/app\nrf.slot(i)/setSlot(i,v)/store(v)/slotCount/clearSlots\nrf.findClass(name)/fields(o)/methods(o)/describe(o)/typeOf(o)\nrf.get(o,name)/set(o,name,v)\nrf.call0..call3(o,name,args)/callStatic0..1(cls,name,args)\nrf.getStatic/setStatic(cls,name[,v])\nrf.newInstance0..2(cls[,args])/inspect(o)\nrf.setResult/getResult/argCount/getArg/setArg/hasThrowable/throwable/hookThis\nio.sleep(ms)/xplog(o)/log(o)/exists(p)\nio.readString(p)/readBytes(p)/writeFile(p,data)\nio.saveInbox(name,data)/inboxList\nio.now/uptime/id(o)/describe(o)/toHex(o)/fromHex(s)\nio.base64Encode(o)/base64Decode(s)</string>
+    <string name="about_disclaimer">免责声明</string>
+    <string name="about_disclaimer_text">本工具用于学习、调试与互操作性研究。修改其他应用的运行时数据可能违反其服务条款，由此产生的一切后果由使用者自行承担。</string>
+    <string name="about_opensource">开源组件</string>
+    <string name="about_opensource_text">FakeScript（com.github.esrrhs.fakescript）— 脚本引擎\nXposedBridge API 82 — Hook 接口，运行时由 LSPosed 提供\nMaterial Components for Android — 界面组件</string>
+    <string name="about_origin">基于 FormatFa/ReflectMaster 1.9.1 完全重写：现代化构建链、AndroidX/Material 3、适配 Android 11+、修复悬浮窗与配置读取、移除注册码与外部核心安装逻辑。</string>
+
+    <string name="reset_all">清空全部配置</string>
+    <string name="confirm_reset">确定清空目标列表、脚本、Hook 规则与日志？此操作不可撤销。</string>
+    <string name="reset_done">已重置</string>
+
+    <!-- ============================= targets ============================= -->
+    <string name="search_hint">搜索应用名或包名</string>
+    <string name="show_system_apps">系统应用</string>
+    <string name="only_selected">只看已选</string>
+    <string name="target_saved">已保存，请强制停止目标应用后重新打开</string>
+    <string name="open_app">打开</string>
+    <string name="app_info">应用信息</string>
+    <string name="loading">加载中…</string>
+    <string name="select_all">全选</string>
+    <string name="deselect_all">全不选</string>
+    <string name="installed_count">共 %1$d 个应用</string>
+
+    <!-- ============================= scripts ============================= -->
+    <string name="new_script">新建脚本</string>
+    <string name="script_name_hint">脚本名称</string>
+    <string name="script_code_hint">FakeScript 代码，入口 func main()</string>
+    <string name="script_list_hint">脚本会在目标进程的控制台「脚本」页出现；修改后重新呼出控制台即可生效。</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="delete_confirm">确定删除「%1$s」？</string>
+    <string name="deleted">已删除</string>
+    <string name="saved">已保存</string>
+    <string name="name_empty">名称不能为空</string>
+    <string name="run">运行</string>
+    <string name="copy">复制</string>
+    <string name="copied">已复制</string>
+    <string name="paste">粘贴</string>
+    <string name="format_code">整理缩进</string>
+    <string name="empty_list">暂无内容</string>
+    <string name="check_syntax">检查语法</string>
+    <string name="syntax_ok">语法检查通过</string>
+    <string name="syntax_error">语法错误：%1$s</string>
+    <string name="insert_template">插入模板</string>
+    <string name="export_shared">导出</string>
+    <string name="import_shared">导入</string>
+    <string name="export_done">已导出到所选位置</string>
+    <string name="import_done">已导入 %1$d 项</string>
+    <string name="import_failed">导入失败：%1$s</string>
+
+    <!-- ============================== hooks ============================== -->
+    <string name="new_hook">新建 Hook</string>
+    <string name="hook_enabled">启用</string>
+    <string name="hook_name_hint">规则名称</string>
+    <string name="hook_class_hint">目标类全名，例如 android.app.Activity</string>
+    <string name="hook_method_hint">方法名，例如 onCreate</string>
+    <string name="hook_params_hint">参数类型（每行一个，可留空）；基本类型写 int / long / boolean / float / double / byte / short / char</string>
+    <string name="hook_timing">执行时机</string>
+    <string name="timing_before">方法执行前 (before)</string>
+    <string name="timing_after">方法执行后 (after)</string>
+    <string name="hook_code_hint">FakeScript 代码，入口 func hook(param)</string>
+    <string name="hook_target_package">生效包名（留空 = 所有已选目标）</string>
+    <string name="hook_invalid">类名与方法名不能为空</string>
+    <string name="hook_applied">已保存，切换回目标应用（或重新打开）后生效</string>
+    <string name="hook_list_hint">规则在目标进程 onResume 时按配置版本自动重载，无需重启应用。</string>
+    <string name="hook_params_title">参数类型</string>
+
+    <!-- =============================== log =============================== -->
+    <string name="refresh">刷新</string>
+    <string name="share">分享</string>
+
+    <!-- =============================== misc ============================== -->
+    <string name="ok">确定</string>
+    <string name="close">关闭</string>
+    <string name="back">返回</string>
+    <string name="retry">重试</string>
+    <string name="none">无</string>
+    <string name="lines">%1$d 行</string>
+    <string name="disabled">已停用</string>
+    <string name="enabled">已启用</string>
+    <string name="menu">菜单</string>
+    <string name="duplicate">复制为新项</string>
 </resources>

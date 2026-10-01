@@ -1,8 +1,21 @@
+// Vendored FakeScript VM (com.github.esrrhs.fakescript).
+// Pure Java, no Android dependency. Sources are intentionally left untouched;
+// only the build script was modernised for Gradle 8 / JDK 17.
+//
+// Old script used `sourceCompatibility = "1.7"`, which JDK 17 no longer accepts
+// (release 7 was removed in JDK 20 and is unreliable before that).
+
 apply plugin: 'java-library'
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // The vendored generated lexer/parser is full of raw types and unchecked
+    // casts. Keep them as warnings so the module still builds cleanly.
+    options.compilerArgs << '-Xlint:none'
+    options.compilerArgs << '-nowarn'
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive icon foreground: a "reflection" mark.
+  Solid triangle on the left, mirrored translucent triangle on the right,
+  split by a thin vertical mirror axis. Everything sits inside the 66dp
+  safe zone (21..87) of the 108dp adaptive canvas.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,42 L48,54 L30,66 Z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.55"
+        android:pathData="M78,42 L60,54 L78,66 Z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.9"
+        android:pathData="M52.6,28 L55.4,28 L55.4,80 L52.6,80 Z" />
+
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M54,23 L85,54 L54,85 L23,54 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.35"
+        android:strokeWidth="2.5" />
+</vector>

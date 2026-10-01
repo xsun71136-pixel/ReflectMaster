@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Overrides for dark mode; the brand colours stay the same. -->
+    <color name="rm_text_primary">#FFE6E8F2</color>
+    <color name="rm_muted">#FF9AA0B5</color>
+</resources>
