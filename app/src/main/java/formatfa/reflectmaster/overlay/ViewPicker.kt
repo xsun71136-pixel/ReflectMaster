@@ -164,16 +164,23 @@ object ViewPicker {
                     paint.style = Paint.Style.FILL
                     paint.textSize = OUi.sp(context, 11f)
                     val tw = paint.measureText(label)
+                    // OUi.dp() returns Int; Canvas draw* need Float.
+                    val padBoxTop = OUi.dp(context, 14f).toFloat()
+                    val padBoxRight = OUi.dp(context, 12f).toFloat()
+                    val padBoxBottom = OUi.dp(context, 4f).toFloat()
+                    val padTextLeft = OUi.dp(context, 6f).toFloat()
                     val ty = if (rect.top - OUi.dp(context, 22f) > 0) {
-                        rect.top - OUi.dp(context, 6f)
+                        (rect.top - OUi.dp(context, 6f)).toFloat()
                     } else {
-                        rect.bottom + OUi.dp(context, 18f)
+                        (rect.bottom + OUi.dp(context, 18f)).toFloat()
                     }
                     paint.color = if (pal.dark) 0xCC000000.toInt() else 0xCCFFFFFF.toInt()
-                    canvas.drawRect(rect.left.toFloat(), ty - OUi.dp(context, 14f),
-                        rect.left.toFloat() + tw + OUi.dp(context, 12f), ty + OUi.dp(context, 4f), paint)
+                    canvas.drawRect(
+                        rect.left.toFloat(), ty - padBoxTop,
+                        rect.left.toFloat() + tw + padBoxRight, ty + padBoxBottom, paint
+                    )
                     paint.color = if (pal.dark) Color.WHITE else Color.BLACK
-                    canvas.drawText(label, rect.left.toFloat() + OUi.dp(context, 6f), ty, paint)
+                    canvas.drawText(label, rect.left.toFloat() + padTextLeft, ty, paint)
                 } catch (t: Throwable) {
                     // A view can die between the hit test and the draw.
                 }

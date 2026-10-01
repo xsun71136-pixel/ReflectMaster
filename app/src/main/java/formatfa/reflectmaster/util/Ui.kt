@@ -27,11 +27,14 @@ object Ui {
 
     /** Run [task] off the main thread, deliver the result back on it. */
     fun <T> async(task: Callable<T>, onUi: (T) -> Unit): Future<T> {
-        return pool.submit {
+        // ExecutorService.submit is overloaded for Runnable and Callable; without
+        // the explicit SAM constructor Kotlin binds the Runnable one and the
+        // return type degrades to Future<*>.
+        return pool.submit(Callable<T> {
             val result = task.call()
             main.post { onUi(result) }
             result
-        }
+        })
     }
 
     fun postUi(body: () -> Unit) {

@@ -57,8 +57,23 @@ def api(path, method="GET", data=None, raw=False):
 def main():
     local_commit = sys.argv[1] if len(sys.argv) > 1 else "HEAD"
     local_commit = sh(["git", "rev-parse", local_commit]).decode().strip()
-    parent = sh(["git", "rev-parse", local_commit + "^"]).decode().strip()
     message = sh(["git", "log", "-1", "--pretty=%B", local_commit]).decode()
+
+    # Parent resolution: prefer the local parent when the server already has it,
+    # otherwise stack on top of the remote branch head. `git push` is not usable
+    # here (github.com:443 is unreachable), so local and remote commit identities
+    # can legitimately diverge while their trees agree.
+    remote_head = api("/git/refs/heads/" + BRANCH)["object"]["sha"]
+    local_parent = sh(["git", "rev-parse", local_commit + "^"]).decode().strip()
+    parent = local_parent
+    try:
+        api("/git/commits/" + local_parent)
+    except SystemExit:
+        parent = remote_head
+        print("local parent %s unknown to server; using remote head %s"
+              % (local_parent[:8], parent[:8]))
+    if parent == local_commit:
+        raise SystemExit("nothing to push")
 
     # Tree the server already has for the parent commit.
     remote_parent = api("/git/commits/" + parent)

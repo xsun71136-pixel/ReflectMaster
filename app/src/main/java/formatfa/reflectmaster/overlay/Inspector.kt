@@ -302,7 +302,7 @@ end"""
         rows.add(Row("清空变量槽", "释放全部 " + Registry.CAPACITY + " 个槽位", CLEAR_SLOTS, true))
         rows.add(Row("刷新配置", "重新读取模块配置", REFRESH_CONFIG, true))
 
-        return listView(rows) { row ->
+        return listView(rows, onClick = { row ->
             val p = row.payload
             when {
                 p === PICK_VIEW -> startViewPicker()
@@ -322,7 +322,7 @@ end"""
                 }
                 else -> focusOn(p)
             }
-        }
+        })
     }
 
     private fun showClassLoaderInfo() {
